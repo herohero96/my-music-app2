@@ -13,7 +13,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li @click="selectItem(item)" v-for="item in discList" class="item">
+            <li v-for="item in discList" class="item">
               <div class="icon">
                 <img width="60" height="60" :src="item.imgurl">
               </div>
@@ -31,7 +31,7 @@
 <script type="text/ecmascript-6">
 
   import Slider from 'base/slider/slider'
-  // import Scroll from 'base/scroll/scroll'
+  import Scroll from 'base/scroll/scroll'
   import {getRecommend, getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
 

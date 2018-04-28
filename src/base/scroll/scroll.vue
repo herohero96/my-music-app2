@@ -25,7 +25,7 @@
 			setTimeout(() => {
 				this._initScroll()
 			})
-		}
+		},
 		methods: {
 			_initScroll() {
 				if(!this.$refs.wrapper) {
@@ -47,7 +47,7 @@
 			}
 		},
 		watch() {
-			data() {
+			data: {
 				setTimeout( () => {
 					this.refresh()
 				}, 20 )
