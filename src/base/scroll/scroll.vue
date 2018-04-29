@@ -24,7 +24,7 @@
 		mounted(){
 			setTimeout(() => {
 				this._initScroll()
-			})
+			}, 20)
 		},
 		methods: {
 			_initScroll() {
@@ -36,8 +36,8 @@
 					click: this.click
 				})
 			},
-			enabel() {
-				this.scroll && this.ccroll.enabel()
+			enable() {
+				this.scroll && this.ccroll.enable()
 			},
 			disable() {
 				this.scroll && this.scroll.disable()
@@ -46,8 +46,8 @@
 				this.scroll && this.scroll.refresh()
 			}
 		},
-		watch() {
-			data: {
+		watch: {
+			data() {
 				setTimeout( () => {
 					this.refresh()
 				}, 20 )
