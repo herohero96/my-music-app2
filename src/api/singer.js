@@ -17,5 +17,5 @@ export function getSingerList() {
         g_tk: 385844900
     })
 
-    return jsonp(url, data, options)
+    return jsonp(url, data, options)     
 }

@@ -2,7 +2,7 @@
 	<scroll class="listview" :data='data' ref="listview" :listenScroll='listenScroll' :probeType='probeType' @scroll="scroll">
 		<ul>
 			<li v-for="group in data" class="list-group" ref="listGroup">
-				<h2 class="list-group-title">{{group.title}} aa</h2>
+				<h2 class="list-group-title">{{group.title}}</h2>
 				<ul>
 					<li v-for="item in group.items" class="list-group-item">
 						<img class="avatar" v-lazy="item.avatar">
@@ -22,14 +22,22 @@
       </ul>
     </div>
 
+    <div class="list-fixed" v-show="fixedTitle" ref="fixed">
+      <h1 class="fixed-title">{{fixedTitle}}</h1>
+    </div>
+
+    <div v-show="!data.length" class="loading-container">
+      <Loading></Loading>
+    </div>
 	</scroll>
 </template>
 
 <script type="text/ecmascript-6">
 	import Scroll from 'base/scroll/scroll'
-  import {getData} from 'common/js/dom'
+  import {getData} from 'common/js/dom' 
+  import Loading from 'base/loading/loading'
   const ANCHOR_HEIGHT = 18
-
+  const TITLE_HEIGHT = 30
 
 	export default {
     created() {
@@ -41,7 +49,8 @@
     data() {
       return {
         scrollY: -1,
-        currentIndex: 0
+        currentIndex: 0,
+        diff: -1
       }
     },
     props: {
@@ -55,6 +64,12 @@
         return this.data.map( (group) => {
           return group.title.substr(0,1)
         } )
+      },
+      fixedTitle () {
+        if (this.scrollY > 0) {
+          return ''
+        }
+       return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
       }
     },
     methods: {
@@ -74,7 +89,6 @@
 
       },
       scroll(pos) {
-        console.log(pos.y);
         this.scrollY = pos.y
       },
       _scrollTo(index) {
@@ -84,12 +98,14 @@
         this.listHeight = []
         const list = this.$refs.listGroup
         let height = 0
+
         this.listHeight.push(height)
         for (let i =0; i < list.length; i++ ) {
           let item = list[i]
           height += item.clientHeight
           this.listHeight.push(height)
         }
+        
       }
     },
     watch: {
@@ -99,7 +115,6 @@
         }, 20)
       },
       scrollY(newY) {
-        console.log(1234);
         const listHeight = this.listHeight
         // 当滚动到顶部，newY>0
         if (newY > 0) {
@@ -118,13 +133,20 @@
         }
         // 当滚动到底部，且-newY大于最后一个元素的上限
         this.currentIndex = listHeight.length - 2
-        console.log(this.currentIndex);
       },
-
+      diff(newVal) {
+        let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT ) ? newVal - TITLE_HEIGHT : 0
+        if(this.fixedTop === fixedTop) {
+          return
+        }
+        this.fixedTop = fixedTop
+        this.$refs.fixed.style.transform = `translate3d(0, ${fixedTop}px, 0)`
+      }
 
     },
 		components: {
-			Scroll
+			Scroll,
+      Loading
 		}
 
 	}
